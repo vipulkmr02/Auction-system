@@ -1,0 +1,1 @@
+copy C:\Users\Aryas\PycharmProjects\auction\* E:\auction\
