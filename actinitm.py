@@ -8,9 +8,9 @@ item_counter = 0
 
 
 class AuctionItem:
-    def __init__(self, base_price, name=None):
+    def __init__(self, price, name=None):
         print("ITEM CREATED!")
-        self.name, self.base_price = name, base_price
+        self.name, self.base_price = name, price
 
         if self.name is None:
             global item_counter
@@ -24,7 +24,7 @@ class Auction:
         self.time = time
         self.auction_done = False
         self.item_name = thing.name
-        self.bid = thing.base_price
+        self.base_price = thing.price
         self.bid_increment = bid_increment
         self.address = ('localhost', randint(60000, 65000))
         self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -32,7 +32,7 @@ class Auction:
 
     def increase_bid(self, bid=None):
         self.bids += 1
-        self.bid += (self.bid_increment / 100) * self.bid if bid is None else bid
+        self.item.price += (self.bid_increment / 100) * self.bid if bid is None else bid
 
     def timeout(self):
         sleep(self.time)
@@ -43,7 +43,7 @@ class Auction:
         self.server.listen()  # server starts to listen for connections
 
         while self.auction_done is False:  # the value of auction_done is True when the time's out for the program.
-            client, address = auction_server.accept()
+            client, address = self.server.accept()
             client_thread = threading.Thread(target=handle_client, args=(client,))
             name = client.recv(1024).decode(FORMAT)
 
