@@ -1,5 +1,11 @@
 FORMAT = "utf-8"
 
+messages = {
+    None: 0,
+    True: 1,
+    False: 3
+}
+
 
 def process(message):
     if message.startswith("?"):

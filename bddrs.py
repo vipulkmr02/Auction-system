@@ -9,13 +9,22 @@ class Participant:
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     def send(self, abc):
-        self.socket.send(bytes(abc, FORMAT))
+        """sends messages/commands to auction server"""
+        if abc is True:
+            abc = messages[True]
+        elif abc is False:
+            abc = messages[False]
+        elif abc is None:
+            abc = messages[None]
+        else:
+            self.socket.send(bytes(abc, FORMAT))
 
     def listen(self):
+        """Starts listening to the auction server"""
         while True:
-            message = self.socket.recv(1024).decode(FORMAT)
+            message = self.socket.recv(512).decode(FORMAT)
             if process(message) == -1:
-                self.send("invalid")
+                self.send(-1)
 
     def start(self):
         """Starts the participant to send & receive commands to the auction server"""
@@ -28,5 +37,5 @@ class Participant:
 
 
 if __name__ == "__main__":
-    p = Participant("Vipul", ("localhost", 6000))
+    p = Participant("Vipul", ("localhost", 60000))
     p.start()
