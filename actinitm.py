@@ -47,14 +47,35 @@ class Auction:
         ending_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         ending_socket.connect(self.address)
 
+    def listen_client(self, address):
+        while True:
+            client_name = ""
+            client_socket = self.clients[address]["socket"]
+            message = client_socket.recv(512).decode(FORMAT)
+
+            for key, data in messages:
+                if message == key:
+                    message = data
+
+            if message.startswith("?"):
+                self.send(bytes(input(message[1:]), FORMAT), address)
+
+            elif message.startswith("|"):
+                client_name = message[1:]
+                self.clients[client_name] = {}
+
+            elif message.startswith("<"):
+                index = message.find(">")
+                self.clients[client_name][message[1:index]] = message[index + 1:]
+
     def listen_bidders(self):
         """starts listening to the bidders"""
         self.server.listen()  # server starts to listen for connections
 
         while self.auction_done is False:  # the value of auction_done is True when the time's out for the program.
             client, address = self.server.accept()
-            self.clients[address] = [client]
-            client_thread = threading.Thread(target=handle_client, args=(client,))
+            self.clients[address] = {"socket": client}
+            client_thread = threading.Thread(target=self.listen_client, args=(address,))
             client_thread.start()
             print(self.clients)
 
@@ -85,7 +106,7 @@ if __name__ == "__main__":
     while True:
         i = input("> ")
         if i == "send":
-            action.send("hello")
+            action.send("hello", )
 
         elif i == "stop":
             action.stop()
