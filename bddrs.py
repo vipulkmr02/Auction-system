@@ -23,8 +23,7 @@ class Participant:
         """Starts listening to the auction server"""
         while True:
             message = self.socket.recv(512).decode(FORMAT)
-            if process(message) == -1:
-                self.send(-1)
+            process(message)
 
     def start(self):
         """Starts the participant to send & receive commands to the auction server"""

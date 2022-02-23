@@ -30,6 +30,7 @@ class Auction:
         self.address = ('localhost', port)
         self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.server.bind(self.address)
+        self.listen_bidders = threading.Thread(target=self.listen_bidders)
 
     def increase_bid(self, bid=None):
         self.bids += 1
@@ -41,6 +42,11 @@ class Auction:
 
         self.auction_done = True
 
+    def stop(self):
+        """stops the auction server"""
+        ending_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        ending_socket.connect(self.address)
+
     def listen_bidders(self):
         """starts listening to the bidders"""
         self.server.listen()  # server starts to listen for connections
@@ -50,11 +56,12 @@ class Auction:
             self.clients[address] = [client]
             client_thread = threading.Thread(target=handle_client, args=(client,))
             client_thread.start()
+            print(self.clients)
 
     def send(self, message, address="*"):
         if address == "*":
             for data in self.clients:
-                client = data[0]
+                client = data["socket"]
                 client.send(bytes(message, FORMAT))
         else:
             if (type(message) == bool) or (type(message) is None):
@@ -64,12 +71,8 @@ class Auction:
 
     def start(self):
         timeout = threading.Thread(target=self.timeout)
+        self.listen_bidders.start()
         timeout.start()
-
-        while self.auction_done is False:
-            self.listen_bidders()
-
-        timeout.join()
 
 
 if __name__ == "__main__":
@@ -78,3 +81,11 @@ if __name__ == "__main__":
     action = Auction(item, 60000, 2, 60)
     print("auction created")
     action.start()
+
+    while True:
+        i = input("> ")
+        if i == "send":
+            action.send("hello")
+
+        elif i == "stop":
+            action.stop()
