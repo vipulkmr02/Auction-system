@@ -1,5 +1,12 @@
+from os import system as sys
+
+# server
 FORMAT = "utf-8"
 DISCONNECT_MESSAGE = "!@disconnect@!"
+
+# tkinter GUI
+FONT_HEADING = "Arial 20"
+FONT = "Calibri 12"
 
 messages = {
     None: 0,

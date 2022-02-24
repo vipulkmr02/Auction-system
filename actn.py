@@ -7,7 +7,7 @@ from common import *
 
 class Auction:
     def __init__(self,
-                 thing,
+                 item,
                  currency="INR",
                  addr=("localhost", 60000),
                  bid_increment=10,
@@ -15,7 +15,7 @@ class Auction:
                  ):
         """
         parameters
-                 thing,
+                 item,
                  currency="INR",
                  addr=("localhost", 60000),
                  bid_increment=10,
@@ -24,9 +24,9 @@ class Auction:
         self.winner = ""
 
         # item variables
-        self.item = thing
-        self.item_name = thing.name
-        self.base_price = thing.price
+        self.item = item
+        self.item_name = item.name
+        self.base_price = item.price
 
         # auction variables
         self.bids = 0
@@ -62,18 +62,17 @@ class Auction:
 
     def instant_eval(self):
         while self.auction_done is False:
-            m = 0
             for client, data in self.clients:
-                now = self.clients[client]["latest_bid_position"]
-                if now > m:
-                    m = now
-                self.highest_bidder = client
+                if self.bids == self.clients[client]["latest_bid_position"]:
+                    self.highest_bidder = client
 
     def evaluate_result(self):
         """evaluates the result auction"""
         if self.auction_done is True:
             self.winner = self.highest_bidder
             self.hammer_price = self.current_bid
+
+        self.item.sold(self.winner, self.hammer_price)
 
     def stop(self):
         """stops the auction server"""
@@ -144,4 +143,5 @@ class Auction:
         # the timeout thread will stop the auction after the given duration by the user
         # by default the timeout of an auction is 200 seconds
         self.listen_bidders.start()
+        self.result.start()
         timeout.start()

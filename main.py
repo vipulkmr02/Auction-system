@@ -1,20 +1,19 @@
-from actinitm import *
-from actn import *
+from tkinter import *
 
-item = AuctionItem(name="watch", price=400)
+main_window = Tk()
+main_window.geometry("600x400")
+font = "\"Lucida Bright\" 40"
 
-auction = Auction(
-    item,
-    addr=("localhost", 61000),
-    bid_increment=2,
-    duration=50
-)
 
-auction.start()
+def create():
+    close
 
-while True:
-    i = input(">")
+def join():
+    pass
 
-    if i == "stop":
-        break
-        auction.stop()
+
+Button(text="create", command=create, font=font).grid(row=0, column=0)
+Button(text="join", command=join, font=font).grid(row=0, column=1)
+
+main_window.mainloop()
+main_window.destroy()
