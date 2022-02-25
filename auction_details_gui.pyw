@@ -87,13 +87,13 @@ Button(
     command=collect
 ).grid(row=7, column=0, columnspan=3)
 
-# item json upload button
-# Button(item_details_frame,
-#        text="ITEM's file", relief=GROOVE,
-#        bd=3, command=json_button,
-#        font=FONT, activebackground="black",
-#        activeforeground="white"
-#        ).grid(row=1, column=0)
+# JSON button
+Button(item_details_frame,
+       text="ITEM's file", relief=,
+       bd=3, command=json_button,
+       font=FONT, activebackground="black",
+       activeforeground="white"
+       ).grid(row=1, column=0)
 
 item_details_frame.pack(padx=15, pady=15)
 
