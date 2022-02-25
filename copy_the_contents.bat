@@ -1,1 +1,1 @@
-copy C:\Users\Aryas\PycharmProjects\auction\* E:\auction\
+copy C:\Users\Aryas\PycharmProjects\auction\* E:\college\auction\

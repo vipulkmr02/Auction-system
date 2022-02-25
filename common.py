@@ -1,12 +1,15 @@
-from os import system as sys
+from sys import platform
+from tkinter import filedialog as fd
 
+OPERATING_SYSTEM = platform
 # server
 FORMAT = "utf-8"
 DISCONNECT_MESSAGE = "!@disconnect@!"
 
 # tkinter GUI
-FONT_HEADING = "Arial 20"
-FONT = "Calibri 12"
+FONT_HEADING = "\"Arial\" 18"
+FONT = "\"Open Sans\" 12"
+
 
 messages = {
     None: 0,
