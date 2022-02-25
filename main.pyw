@@ -6,7 +6,8 @@ font = "\"Lucida Bright\" 40"
 
 
 def create():
-    close
+    main_window.destroy()
+    
 
 def join():
     pass
