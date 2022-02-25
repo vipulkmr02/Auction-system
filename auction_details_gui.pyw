@@ -3,6 +3,7 @@ from tkinter import *
 from tkinter import filedialog
 from common import *
 
+
 def json_button():
     file = filedialog.askopenfilename(filetypes=(("JSON", "*.json"),))
     return file
@@ -10,8 +11,8 @@ def json_button():
 
 ITEM, AUCTION = {}, {}
 AUCTION_DURATION = 0
-var = IntVar()  # 1 for PUBLIC 2 for PRIVATE
 main_window = Tk()
+var = IntVar()  # 1 for PUBLIC 2 for PRIVATE
 main_window.title("Create an AUCTION")
 main_window.geometry("500x500")
 
@@ -84,15 +85,15 @@ Button(
     item_details_frame,
     text="SUBMIT",
     font=FONT,
-    command=collect
+    command=collect, padx=10, pady=10
 ).grid(row=7, column=0, columnspan=3)
 
 # JSON button
 Button(item_details_frame,
-       text="ITEM's file", relief=,
+       text="ITEM's file", relief=GROOVE,
        bd=3, command=json_button,
        font=FONT, activebackground="black",
-       activeforeground="white"
+       activeforeground="white", padx=10, pady=10
        ).grid(row=1, column=0)
 
 item_details_frame.pack(padx=15, pady=15)
