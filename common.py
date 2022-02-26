@@ -1,5 +1,4 @@
 from sys import platform
-from tkinter import filedialog as fd
 
 OPERATING_SYSTEM = platform
 # server
@@ -8,9 +7,17 @@ DISCONNECT_MESSAGE = "!@disconnect@!"
 
 # tkinter GUI
 FONT_HEADING = ("Arial", 18)
-FONT = ("Open Sans",  12)
+FONT = ("Open Sans", 12)
 FONT_LABELS = ("Open Sans", 12, "bold")
 FONT_BUTTON = ("Open Sans", 12)
+
+
+def read_auction(file_path):
+    from json import loads
+    content = open(file_path).read()
+    return loads(content)
+
+
 
 
 messages = {

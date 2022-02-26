@@ -1,0 +1,5 @@
+*.swp
+*.pyc
+*.bat
+/data
+./idea/

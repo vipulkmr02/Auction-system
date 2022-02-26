@@ -1,9 +1,9 @@
-from datetime import datetime
 # from bddrs import *
+from json import dumps
+from os import system
 from tkinter import *
 from tkinter import filedialog
 from common import *
-
 
 JSON_location = ""
 
@@ -15,9 +15,9 @@ def json_button():
 
 
 ITEM, AUCTION = {}, {}
-AUCTION_DURATION = 0
 main_window = Tk()
 var = IntVar()  # 1 for PUBLIC 2 for PRIVATE
+var.set(-1)
 main_window.title("Create an AUCTION")
 main_window.geometry("500x500")
 
@@ -34,7 +34,7 @@ Label(
     font=FONT_LABELS,
     padx=10, pady=10
 ).grid(row=1, column=0)
-duration_box = Entry(auction_details_frame, font=FONT)
+duration_box = Entry(auction_details_frame, font=FONT, relief=FLAT, bd=1)
 duration_box.grid(row=1, column=1, columnspan=2)
 
 Label(
@@ -61,7 +61,6 @@ Radiobutton(
     padx=4,
     pady=10
 ).grid(row=2, column=2)
-
 
 auction_details_frame.pack(padx=20, pady=20)
 
@@ -112,16 +111,43 @@ Item_price.grid(row=3, column=1, padx=10, pady=10)
 
 
 def collect():
-    ITEM["name"] = Item_name.get()
+    if Item_name.get() == "":
+        status.configure(text="Item name is not given")
+    else:
+        ITEM["name"] = Item_name.get()
+
+    if Item_desc.get() == "":
+        status.configure(text="Item description is not given")
+    else:
+        ITEM["desc"] = Item_desc.get()
+
+    if Item_price.get() == "":
+        status.configure(text="Item price is not given")
+    else:
+        ITEM["price"] = Item_price.get()
+
     ITEM["dimensions"] = Item_dimension.get()
-    ITEM["price"] = Item_price.get()
-    ITEM["desc"] = Item_desc.get()
+
     AUCTION["duration"] = duration_box.get()
-    AUCTION["type"] = var.get()
-    file_content = f"auction: {str(AUCTION)}\nitem: {str(ITEM)}"
-    open(
-        f".\\data\\Auction_{datetime.now()}.json", "a").write(file_content)
+
+    if var.get() == -1 or var.get() > 2:
+        status.configure(text="Please specify TYPE of AUCTION")
+
+    if var.get == 1:
+        AUCTION["type"] = "PUBLIC"
+
+    elif var.get == 2:
+        AUCTION["type"] = "PUBLIC"
+
+    file_content = "{\"auction\":%s, \"item\":%s}" % (dumps(AUCTION), dumps(ITEM))
+
+    auction_file = open(
+        f".\\data\\Auction_{ITEM['name']}.json", "w+")
+
+    auction_file.write(file_content)
+    auction_file.close()
     main_window.destroy()
+    system(".\\auction_GUI.py .\\data\\Auction_%s.json" % ITEM['name'])
 
 
 # submit button
@@ -133,11 +159,15 @@ Button(
 ).grid(row=7, column=0)
 
 # JSON button
-Button(item_details_frame,
-       text="ITEM's file", command=json_button,
-       font=FONT
+Button(
+    item_details_frame,
+    text="ITEM's file", command=json_button,
+    font=FONT
 ).grid(row=7, column=1)
 
 item_details_frame.pack(padx=15, pady=15)
 
+# status bar
+status = Label(main_window, relief=FLAT, text="", font=("Segoe UI", 10, "bold"))
+status.pack(anchor=SW, padx=10)
 main_window.mainloop()
