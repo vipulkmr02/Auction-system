@@ -7,8 +7,10 @@ FORMAT = "utf-8"
 DISCONNECT_MESSAGE = "!@disconnect@!"
 
 # tkinter GUI
-FONT_HEADING = "\"Arial\" 18"
-FONT = "\"Open Sans\" 12"
+FONT_HEADING = ("Arial", 18)
+FONT = ("Open Sans",  12)
+FONT_LABELS = ("Open Sans", 12, "bold")
+FONT_BUTTON = ("Open Sans", 12)
 
 
 messages = {
