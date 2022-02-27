@@ -45,7 +45,11 @@ auction_list = Listbox(
 )
 auction_list.pack(padx=10, pady=10)
 
-for i in auctions
+
+def create_auction_list():
+    for id, details in auctions:
+        auction_list.insert(END, f"{details['name']} | {details['price']}")
+
 
 options = LabelFrame(main_window, text="Commands")
 

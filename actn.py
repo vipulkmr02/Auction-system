@@ -70,12 +70,6 @@ class Auction:
         self.auction_done = True
         self.stop()
 
-    def instant_eval(self):
-        while self.auction_done is False:
-            for client, data in self.clients:
-                if self.bids == self.clients[client]["latest_bid_position"]:
-                    self.highest_bidder = client
-
     def evaluate_result(self):
         """evaluates the result auction"""
         if self.auction_done is True:

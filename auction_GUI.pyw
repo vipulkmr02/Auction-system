@@ -142,8 +142,11 @@ def start_auction():
 
 def stop_auction():
     print("auction stopped")
+    action.evaluate_result()
     action.stop()
+    fetch_auctions('-', auction_info)
 
+action.send("")
 
 Button(auction_window, text="start", command=start_auction).pack(anchor=S)
 Button(auction_window, text="stop", command=stop_auction).pack(anchor=S)

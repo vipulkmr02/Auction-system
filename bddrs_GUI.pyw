@@ -38,7 +38,7 @@ time_left.pack(anchor=NE, padx=10, pady=10)
 
 Label(
     auction_details_frame,
-    text="action.highest_bidder",
+    text=action.highest_bidder,
     font=("Engraves MT", 20, 'bold')
 ).pack(anchor=CENTER, padx=20, pady=20, ipadx=10, ipady=10)
 
