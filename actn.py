@@ -49,7 +49,6 @@ class Auction:
 
         # threads
         self.listen_bidders = threading.Thread(target=self.listen_bidders)
-        self.result = threading.Thread(target=self.instant_eval)
         self.timeout_thread = threading.Thread(target=self.timeout)
 
 
@@ -68,7 +67,6 @@ class Auction:
             self.time_left = self.duration - seconds
 
         self.auction_done = True
-        self.stop()
 
     def evaluate_result(self):
         """evaluates the result auction"""
@@ -87,6 +85,7 @@ class Auction:
         self.send(DISCONNECT_MESSAGE)
 
     def listen_client(self, address):
+        print("()\n")
         client_socket, client_name = self.clients[address]["socket"], ""
         self.clients.pop(address)
 
@@ -152,5 +151,4 @@ class Auction:
         # the timeout thread will stop the auction after the given duration by the user
         # by default the timeout of an auction is 200 seconds
         self.listen_bidders.start()
-        self.instant_eval()
         self.timeout_thread.start()

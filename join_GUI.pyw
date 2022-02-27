@@ -1,11 +1,11 @@
 from tkinter import *
+from threading import Thread
+from time import sleep
 from common import *
+from os import system
 
-def connect_auction():
-    pass
-
-
-auctions = fetch_auctions(mode="~")
+auctions = fetch_auctions()
+print(auctions)
 main_window = Tk()
 
 user_details_frame = LabelFrame(
@@ -14,6 +14,14 @@ user_details_frame = LabelFrame(
     padx=10,
     pady=10
 )
+
+
+def connect_auction():
+    global auctions
+    key = "Auction_" + auction_list.get(ANCHOR).split("|")[0][:-1]
+    system(
+        f".\\bddrs_GUI.pyw .\\data\\Auction_{auctions[key]['name']} {auctions[key]['address'][0]}+{auctions[key]['address'][1]}")
+
 
 # USER's details
 Label(
@@ -46,9 +54,21 @@ auction_list = Listbox(
 auction_list.pack(padx=10, pady=10)
 
 
+def clear_auction_list():
+    for index in range(len(auctions)):
+        auction_list.delete(0)
+
+
 def create_auction_list():
-    for id, details in auctions:
-        auction_list.insert(END, f"{details['name']} | {details['price']}")
+    for key in auctions:
+        auction_list.insert(0, f"{auctions[key]['name']} | {auctions[key]['price']}")
+
+
+def update_auction_list():
+    while True:
+        clear_auction_list()
+        create_auction_list()
+        sleep(10)
 
 
 options = LabelFrame(main_window, text="Commands")
@@ -69,4 +89,8 @@ Button(
 user_details_frame.pack(pady=10, padx=10)
 list_frame.pack(pady=10, padx=10)
 options.pack(pady=10, padx=10)
+
+create_auction_list()
 main_window.mainloop()
+
+# TODO: not showing all auctions in the "auction_list" list box

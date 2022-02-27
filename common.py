@@ -15,13 +15,13 @@ FONT_LISTBOX = ("Consolas", 10)
 
 def numberth(number):
     if str(number)[-1] == '1':
-        return number+"st"
+        return number + "st"
     elif str(number)[-1] == '2':
-        return number+"nd"
+        return number + "nd"
     elif str(number)[-1] == '3':
-        return number+"rd"
+        return number + "rd"
     else:
-        return number+"th"
+        return number + "th"
 
 
 def read_auction(file_path):
@@ -32,8 +32,10 @@ def read_auction(file_path):
 
 def fetch_auctions(mode='~', auction_info=None):
     from json import loads, dumps
-    file = open("auctions.json", "r")
-    auctions = loads(file.read())
+    file = open(".\\auctions.json", "r").read()
+    if file == "":
+        file = "{}"
+    auctions = loads(file)
 
     if mode == '~':
         return auctions
@@ -49,7 +51,6 @@ def fetch_auctions(mode='~', auction_info=None):
         file = open("auctions.json", "w")
         auctions.pop(identifier)
         file.write(dumps(auctions))
-
 
 messages = {
     None: 0,

@@ -23,11 +23,13 @@ thing = AuctionItem(
 def check_participants():
     global participants
     length = len(action.clients)
+    print("length")
     while 1:
         if length != len(action.clients):
             sleep(1)
             length = len(action.clients)
             for name, data in action.clients:
+                print("yes I am!")
                 participants.insert(
                     END,
                     f"NAME: {name} | NUMBER OF BIDS: {data['number_of_bids']}"
@@ -58,19 +60,22 @@ if auction["type"] == "PUBLIC":
     }
 
 # ITEM
-item_frame = Frame(auction_window, bd=0, width="200")
+item_frame = LabelFrame(
+    auction_window,
+    font=FONT_LABELS,
+    text="Item details")
 
 Label(
     item_frame,
     text=f"Item on Auction is {item['name']}",
     font=FONT_LABELS
-).pack(anchor=NW, ipadx=5, ipady=5)
+).grid(row=0, column=0)
 
 Label(
     item_frame,
     text=f"which is owned by {owner['name'].upper()}",
-    font=FONT_LABELS
-).pack(anchor=SW, ipadx=5, ipady=5)
+    font=FONT_LABELS,
+).grid(row=1, column=0)
 
 # AUCTION DETAILS
 
@@ -78,28 +83,27 @@ auction_details_frame = Frame(auction_window, bd=0)
 
 time_left = Label(
     auction_details_frame,
-    bd=3,
     font=FONT_LABELS,
 )
-time_left.pack(anchor=NE, padx=10, pady=10)
+time_left.grid(row=0, column=1, columnspan=3)
 
 Label(
     auction_details_frame,
     text=action.highest_bidder,
     font=("Engraves MT", 20, 'bold')
-).pack(anchor=CENTER, padx=20, pady=20, ipadx=10, ipady=10)
+).grid(row=1, column=2)
 
 Label(
     auction_details_frame,
     text=action.current_bid,
     font=("Engraves MT", 16, 'bold')
-).pack(anchor=CENTER, padx=20, pady=20, ipadx=10, ipady=10)
+).grid(row=2, column=2)
 
 # Bidders
 
 bidders_frame = Frame(auction_window, bd=0)
 clients_list = Listbox(bidders_frame, font=FONT_LISTBOX)
-clients_list.pack(anchor=CENTER)
+clients_list.grid(row=0, column=0)
 
 for client, values in action.clients:
     clients_list.insert(
@@ -108,16 +112,16 @@ for client, values in action.clients:
 
 Button_frame = LabelFrame(
     bidders_frame,
-    height=50,
-    bd=0, text='Options',
+    text='Options',
+    bd=0,
     font=FONT_HEADING)
-Button_frame.pack(side="bottom")
+Button_frame.grid(row=1, column=0)
 
 Button(
     Button_frame,
     text="REMOVE",
     font=FONT_BUTTON
-).pack(anchor=CENTER)
+).grid(row=1, column=2)
 
 # PARTICIPANTS
 
@@ -125,33 +129,46 @@ participant_frame = LabelFrame(auction_window, text="Participants", font=FONT_LA
 
 participants = Listbox(participant_frame, font=FONT_LISTBOX)
 
-participants.pack(padx=10, pady=10)
+item_frame.grid(row=0, column=0, padx=10, pady=10)
+auction_details_frame.grid(row=0, column=1, padx=10, pady=10)
+participants.grid(row=1, column=0, padx=10, pady=10)
+bidders_frame.grid(row=1, column=1, padx=10, pady=10)
 
-item_frame.pack(anchor=NW, ipadx=10, ipady=10)
-auction_details_frame.pack(anchor=NE, ipadx=10, ipady=10)
-bidders_frame.pack(anchor=SE, ipadx=10, ipady=10)
-
-auction_window.minsize(800, 400)
+auction_window.minsize(400, 400)
 
 
 def start_auction():
     print("auction started")
     action.start()
     fetch_auctions('+', auction_info)
+    Thread(target=time_count).start()
+    Thread(target=check_participants).start()
 
 
 def stop_auction():
     print("auction stopped")
-    action.evaluate_result()
+    fetch_auctions('-', auction_info)
     action.stop()
+    action.evaluate_result()
     fetch_auctions('-', auction_info)
 
-action.send("")
 
-Button(auction_window, text="start", command=start_auction).pack(anchor=S)
-Button(auction_window, text="stop", command=stop_auction).pack(anchor=S)
-Thread(target=time_count).start()
-Thread(target=check_participants).start()
+start_button = Button(
+    auction_window,
+    text="start",
+    command=start_auction
+)
+start_button.grid(row=2, column=0)
+
+stop_button = Button(
+    auction_window,
+    text="stop",
+    command=stop_auction
+)
+stop_button.grid(row=2, column=1)
+
 # auction_window.configure(background="red")
 # auction_window.wm_attributes("-fullscreen", 'True')
+
+auction_window.resizable(False, False)
 auction_window.mainloop()

@@ -49,7 +49,7 @@ Radiobutton(
     font=FONT,
     variable=var,
     value=1,
-    padx=4,
+    padx=10,
     pady=10
 ).grid(row=2, column=1)
 
@@ -59,7 +59,7 @@ Radiobutton(
     font=FONT,
     variable=var,
     value=2,
-    padx=4,
+    padx=10,
     pady=10
 ).grid(row=2, column=2)
 
@@ -125,7 +125,10 @@ Item_details = Entry(
 Item_details.grid(row=4, column=1, padx=10, pady=10)
 
 # Owner details
-owner_details_frame = LabelFrame(main_window, text="Owner details", font=FONT_LABELS)
+owner_details_frame = LabelFrame(
+    main_window,
+    text="Owner details",
+    font=FONT_HEADING)
 
 Label(
     owner_details_frame,
@@ -146,7 +149,7 @@ Label(
     pady=10
 ).grid(row=1, column=0)
 owner_number = Entry(owner_details_frame, font=FONT)
-owner_number.grid(row=1, column=1, padx=10, pady=10)
+owner_number.grid(row=1, column=1, padx=20, pady=20)
 
 
 def collect():
@@ -196,12 +199,12 @@ def collect():
     auction_file.write(file_content)
     auction_file.close()
     main_window.destroy()
-    system(".\\auction_GUI.py .\\data\\Auction_%s.json" % ITEM['name'])
+    system(".\\auction_GUI.pyw .\\data\\Auction_%s.json" % ITEM['name'])
 
 
-auction_details_frame.pack(fill='x', expand=1, padx=15, pady=115)
-item_details_frame.pack(fill='x', expand=1, padx=15, pady=15)
-owner_details_frame.pack(fill='x', expand=1, padx=15, pady=15)
+auction_details_frame.pack(fill='x', padx=15, pady=15)
+item_details_frame.pack(fill='x', padx=15, pady=15)
+owner_details_frame.pack(fill='x', padx=15, pady=15)
 # submit button
 Button(
     main_window,
@@ -218,7 +221,8 @@ Button(
 ).pack(padx=10, pady=10, side="right")
 
 # status bar
-status = Label(main_window, relief=FLAT, text="", font=("Segoe UI", 10, "bold"))
-status.pack(anchor=SW, padx=10)
-main_window.minsize(400, 700)
+status = Label(main_window, relief=FLAT, text="", font=("Segoe UI", 10,))
+status.pack(anchor=SW)
+main_window.geometry("400x700")
+main_window.resizable(False, False)
 main_window.mainloop()

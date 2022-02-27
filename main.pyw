@@ -10,11 +10,12 @@ font = "\"Lucida Bright\" 40"
 
 def create():
     main_window.destroy()
-    sys(".\\auction_details_gui.pyw")
+    sys("python -u .\\auction_details_gui.pyw")
+
 
 def join():
-
-    pass
+    main_window.destroy()
+    sys("python -u .\\join_GUI.pyw")
 
 # create auction button
 Button(

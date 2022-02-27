@@ -4,7 +4,7 @@ from sys import argv
 
 
 bidding_window = Tk()
-temp_address = argv[2].split("+")
+temp_address = tuple(argv[2].split("+"))
 address = (temp_address[0], int(temp_address[1]))
 details = read_auction(argv[1])
 auction, item, owner = details["auction"], details["item"], details["owner"]
