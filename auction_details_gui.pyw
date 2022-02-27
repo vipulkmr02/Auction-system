@@ -199,7 +199,8 @@ def collect():
     system(".\\auction_GUI.py .\\data\\Auction_%s.json" % ITEM['name'])
 
 
-item_details_frame.pack( fill='x', expand=1, padx=15, pady=15)
+auction_details_frame.pack(fill='x', expand=1, padx=15, pady=115)
+item_details_frame.pack(fill='x', expand=1, padx=15, pady=15)
 owner_details_frame.pack(fill='x', expand=1, padx=15, pady=15)
 # submit button
 Button(

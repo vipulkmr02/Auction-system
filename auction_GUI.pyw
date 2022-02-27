@@ -53,9 +53,9 @@ if auction["type"] == "PUBLIC":
     auction_info = {
         "name": item['name'],
         "desc": item['desc'],
-        "price": item['price']
+        "price": item['price'],
+        "address": action.address
     }
-    fetch_ongoing_auctions('s', auction_info)
 
 # ITEM
 item_frame = Frame(auction_window, bd=0, width="200")
@@ -85,13 +85,13 @@ time_left.pack(anchor=NE, padx=10, pady=10)
 
 Label(
     auction_details_frame,
-    text="action.highest_bidder",
+    text=action.highest_bidder,
     font=("Engraves MT", 20, 'bold')
 ).pack(anchor=CENTER, padx=20, pady=20, ipadx=10, ipady=10)
 
 Label(
     auction_details_frame,
-    text="action.highest_bid",
+    text=action.current_bid,
     font=("Engraves MT", 16, 'bold')
 ).pack(anchor=CENTER, padx=20, pady=20, ipadx=10, ipady=10)
 
@@ -137,6 +137,7 @@ auction_window.minsize(800, 400)
 def start_auction():
     print("auction started")
     action.start()
+    fetch_auctions('+', auction_info)
 
 
 def stop_auction():

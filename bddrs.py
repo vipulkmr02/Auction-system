@@ -6,6 +6,7 @@ import threading
 class Participant:
     def __init__(self, name, address):
         self.name, self.address = name, address
+        self.details = {}
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.listen_server = True
         self.bids = 0

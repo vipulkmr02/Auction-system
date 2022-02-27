@@ -30,17 +30,25 @@ def read_auction(file_path):
     return loads(content)
 
 
-def fetch_ongoing_auctions(a='r', b=None):
+def fetch_auctions(mode='~', auction_info=None):
     from json import loads, dumps
+    file = open("auctions.json", "r")
+    auctions = loads(file.read())
 
-    if a == 'r':
-        file = open("ongoing_auctions.json", "r")
-        result = loads(file.read())
-        return result
+    if mode == '~':
+        return auctions
 
-    if a == 's':
-        file = open("ongoing_auctions.json", "a")
-        file.write(dumps(b))
+    elif mode == '+':
+        identifier = "Auction_%s" % auction_info['name']
+        file = open("auctions.json", "w")
+        auctions[identifier] = auction_info
+        file.write(dumps(auctions))
+
+    elif mode == '-':
+        identifier = "Auction_%s" % auction_info['name']
+        file = open("auctions.json", "w")
+        auctions.pop(identifier)
+        file.write(dumps(auctions))
 
 
 messages = {
