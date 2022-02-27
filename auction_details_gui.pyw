@@ -14,13 +14,14 @@ def json_button():
     JSON_location = file
 
 
-ITEM, AUCTION = {}, {}
+ITEM, AUCTION, OWNER = {}, {}, {}
 main_window = Tk()
 var = IntVar()  # 1 for PUBLIC 2 for PRIVATE
 var.set(-1)
 main_window.title("Create an AUCTION")
-main_window.geometry("500x500")
+main_window.geometry("800x600")
 
+# auction details
 auction_details_frame = LabelFrame(
     main_window,
     font=FONT_HEADING,
@@ -64,6 +65,7 @@ Radiobutton(
 
 auction_details_frame.pack(padx=20, pady=20)
 
+# Item details
 item_details_frame = LabelFrame(main_window, font=FONT_HEADING, text="Item Details")
 
 Label(
@@ -109,6 +111,43 @@ Label(
 Item_price = Entry(item_details_frame, font=FONT)
 Item_price.grid(row=3, column=1, padx=10, pady=10)
 
+Label(
+    item_details_frame,
+    text="Details",
+    font=FONT_LABELS,
+    padx=10, pady=10
+).grid(row=4, column=0)
+
+Item_details = Entry(
+    item_details_frame,
+    font=FONT
+)
+Item_details.grid(row=4, column=1, padx=10, pady=10)
+
+# Owner details
+owner_details_frame = LabelFrame(main_window, text="Owner details", font=FONT_LABELS)
+
+Label(
+    owner_details_frame,
+    text="Name",
+    font=FONT_LABELS,
+    padx=10,
+    pady=10
+).grid(row=0, column=0)
+
+owner_name = Entry(owner_details_frame, font=FONT)
+owner_name.grid(row=0, column=1, padx=10, pady=10)
+
+Label(
+    owner_details_frame,
+    text="Mobile no.",
+    font=FONT_LABELS,
+    padx=10,
+    pady=10
+).grid(row=1, column=0)
+owner_number = Entry(owner_details_frame, font=FONT)
+owner_number.grid(row=1, column=1, padx=10, pady=10)
+
 
 def collect():
     if Item_name.get() == "":
@@ -128,18 +167,28 @@ def collect():
 
     ITEM["dimensions"] = Item_dimension.get()
 
-    AUCTION["duration"] = duration_box.get()
+    ITEM["details"] = Item_details.get()
 
-    if var.get() == -1 or var.get() > 2:
+    if var.get() == 1:
+        AUCTION["type"] = "PUBLIC"
+
+    elif var.get() == 2:
+        AUCTION["type"] = "PRIVATE"
+
+    else:
         status.configure(text="Please specify TYPE of AUCTION")
 
-    if var.get == 1:
-        AUCTION["type"] = "PUBLIC"
+    print(AUCTION)
 
-    elif var.get == 2:
-        AUCTION["type"] = "PUBLIC"
+    AUCTION["duration"] = duration_box.get()
 
-    file_content = "{\"auction\":%s, \"item\":%s}" % (dumps(AUCTION), dumps(ITEM))
+    if owner_name.get() == "" or owner_number.get() == "":
+        status.configure(text="Owner details are not complete")
+    else:
+        OWNER["name"] = owner_name.get()
+        OWNER["mobile"] = owner_number.get()
+
+    file_content = "{\"auction\":%s, \"item\":%s, \"owner\":%s}" % (dumps(AUCTION), dumps(ITEM), dumps(OWNER))
 
     auction_file = open(
         f".\\data\\Auction_{ITEM['name']}.json", "w+")
@@ -150,24 +199,25 @@ def collect():
     system(".\\auction_GUI.py .\\data\\Auction_%s.json" % ITEM['name'])
 
 
+item_details_frame.pack( fill='x', expand=1, padx=15, pady=15)
+owner_details_frame.pack(fill='x', expand=1, padx=15, pady=15)
 # submit button
 Button(
-    item_details_frame,
+    main_window,
     text="SUBMIT",
     font=FONT,
     command=collect
-).grid(row=7, column=0)
+).pack(padx=10, pady=10, side="left")
 
 # JSON button
 Button(
-    item_details_frame,
+    main_window,
     text="ITEM's file", command=json_button,
-    font=FONT
-).grid(row=7, column=1)
-
-item_details_frame.pack(padx=15, pady=15)
+    font=FONT,
+).pack(padx=10, pady=10, side="right")
 
 # status bar
 status = Label(main_window, relief=FLAT, text="", font=("Segoe UI", 10, "bold"))
 status.pack(anchor=SW, padx=10)
+main_window.minsize(400, 700)
 main_window.mainloop()

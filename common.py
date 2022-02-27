@@ -6,10 +6,22 @@ FORMAT = "utf-8"
 DISCONNECT_MESSAGE = "!@disconnect@!"
 
 # tkinter GUI
-FONT_HEADING = ("Arial", 18)
-FONT = ("Open Sans", 12)
-FONT_LABELS = ("Open Sans", 12, "bold")
-FONT_BUTTON = ("Open Sans", 12)
+FONT_HEADING = ("Noto Sans", 12)
+FONT = ("Open Sans", 10)
+FONT_LABELS = ("Open Sans", 10, "bold")
+FONT_BUTTON = ("Segoe UI", 10)
+FONT_LISTBOX = ("Consolas", 10)
+
+
+def numberth(number):
+    if str(number)[-1] == '1':
+        return number+"st"
+    elif str(number)[-1] == '2':
+        return number+"nd"
+    elif str(number)[-1] == '3':
+        return number+"rd"
+    else:
+        return number+"th"
 
 
 def read_auction(file_path):
@@ -18,6 +30,17 @@ def read_auction(file_path):
     return loads(content)
 
 
+def fetch_ongoing_auctions(a='r', b=None):
+    from json import loads, dumps
+
+    if a == 'r':
+        file = open("ongoing_auctions.json", "r")
+        result = loads(file.read())
+        return result
+
+    if a == 's':
+        file = open("ongoing_auctions.json", "a")
+        file.write(dumps(b))
 
 
 messages = {

@@ -1,5 +1,5 @@
 class AuctionItem:
-    def __init__(self, price, name,dimensions, desc,details,owner):
+    def __init__(self, price, name, dimensions, desc, details, owner):
         self.name, self.price = name, price
         self.hammer_price = 0
         self.buyer = None

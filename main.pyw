@@ -10,7 +10,7 @@ font = "\"Lucida Bright\" 40"
 
 def create():
     main_window.destroy()
-    sys("auction_details_gui.pyw")
+    sys(".\\auction_details_gui.pyw")
 
 def join():
 

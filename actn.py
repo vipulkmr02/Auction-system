@@ -29,6 +29,8 @@ class Auction:
         self.base_price = item.price
 
         # auction variables
+        self.type = type
+        self.time_left = 0
         self.bids = 0
         self.hammer_price = self.base_price
         self.highest_bidder = ""
@@ -48,14 +50,22 @@ class Auction:
         # threads
         self.listen_bidders = threading.Thread(target=self.listen_bidders)
         self.result = threading.Thread(target=self.instant_eval)
+        self.timeout_thread = threading.Thread(target=self.timeout)
+
 
     def increase_bid(self, bid=""):
         self.bids += 1
-        self.current_bid += (self.bid_increment / 100) * self.base_price if bid is "" else int(bid)
+
+        if bid == "":
+            self.current_bid += (self.bid_increment / 100) * self.base_price
+        else:
+            self.current_bid = int(bid)
 
     def timeout(self):
+        print("the auction will stop on TIME")
         for seconds in range(self.duration):
             sleep(1)
+            self.time_left = self.duration - seconds
 
         self.auction_done = True
         self.stop()
@@ -76,6 +86,7 @@ class Auction:
 
     def stop(self):
         """stops the auction server"""
+        self.timeout_thread.join()
         ending_socket = socket.socket(
             socket.AF_INET, socket.SOCK_STREAM)
         ending_socket.connect(self.address)
@@ -111,8 +122,13 @@ class Auction:
                 index = message.find(">")
                 self.clients[client_name][message[1:index]] = message[index + 1:]
 
+            elif message is DISCONNECT_MESSAGE:
+                client_socket.close()
+                self.clients.pop(client_name)
+
     def listen_bidders(self):
         """starts listening to the bidders"""
+        print("listening to bidders")
         self.server.listen()  # server starts to listen for connections
 
         while self.auction_done is False:  # the value of auction_done is True when the time's out for the program.
@@ -139,9 +155,8 @@ class Auction:
 
     def start(self):
         """starts the auction"""
-        timeout = threading.Thread(target=self.timeout)
         # the timeout thread will stop the auction after the given duration by the user
         # by default the timeout of an auction is 200 seconds
         self.listen_bidders.start()
-        self.result.start()
-        timeout.start()
+        self.instant_eval()
+        self.timeout_thread.start()
