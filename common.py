@@ -52,22 +52,13 @@ def fetch_auctions(mode='~', auction_info=None):
         auctions.pop(identifier)
         file.write(dumps(auctions))
 
+
 messages = {
     None: 0,
     True: 1,
     False: 3,
     "+": 10
 }
-
-
-def process(message):
-    if message.startswith("?"):
-        return input(message[1:-1])
-    elif message.startswith("!"):
-        print(message[1:-1])
-
-    else:
-        return -1
 
 
 def handle_client(s):

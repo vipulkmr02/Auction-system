@@ -30,7 +30,6 @@ class Auction:
 
         # auction variables
         self.type = type
-        self.time_left = 0
         self.bids = 0
         self.hammer_price = self.base_price
         self.highest_bidder = ""
@@ -39,6 +38,7 @@ class Auction:
         self.bid_increment = bid_increment
         self.auction_done = False
         self.duration = duration
+        self.time_left = self.duration
         self.auction_start_time = datetime.datetime.now()
         self.currency = currency
 
@@ -50,7 +50,7 @@ class Auction:
         # threads
         self.listen_bidders = threading.Thread(target=self.listen_bidders)
         self.timeout_thread = threading.Thread(target=self.timeout)
-
+        self.brief_client = threading.Thread(target=self.send_info_client)
 
     def increase_bid(self, bid=""):
         self.bids += 1
@@ -61,7 +61,6 @@ class Auction:
             self.current_bid = int(bid)
 
     def timeout(self):
-        print("the auction will stop on TIME")
         for seconds in range(self.duration):
             sleep(1)
             self.time_left = self.duration - seconds
@@ -121,7 +120,6 @@ class Auction:
 
     def listen_bidders(self):
         """starts listening to the bidders"""
-        print("listening to bidders")
         self.server.listen()  # server starts to listen for connections
 
         while self.auction_done is False:  # the value of auction_done is True when the time's out for the program.
@@ -146,9 +144,22 @@ class Auction:
             else:
                 self.clients[address][0].send(bytes(message, FORMAT))
 
+    def send_info_client(self):
+        while True:
+            m = "@uction_data" + str({"hb": self.highest_bidder,
+                                      "cb": self.current_bid,
+                                      "ad": self.auction_done,
+                                      "tl": self.time_left,
+                                      "bi": self.bid_increment,
+                                      'cd': self.clients
+                                      })
+
+            self.send(m)
+
     def start(self):
         """starts the auction"""
         # the timeout thread will stop the auction after the given duration by the user
         # by default the timeout of an auction is 200 seconds
         self.listen_bidders.start()
+        self.brief_client.start()
         self.timeout_thread.start()

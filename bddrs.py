@@ -10,6 +10,7 @@ class Participant:
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.listen_server = True
         self.bids = 0
+        self.auction_data = {}
 
     def send(self, abc):
         """sends messages/commands to auction server"""
@@ -17,12 +18,16 @@ class Participant:
 
     def bid(self, price=""):
         """sends the command to increase the bid"""
-        self.send(f"+{price}")
+        self.send("+"+price)
 
     def listen(self):
         """Starts listening to the auction server"""
+        from json import loads
         while self.listen_server:
             message = self.socket.recv(512).decode(FORMAT)
+
+            if message.startswith("@uction_data"):
+                self.auction_data = loads(message[len("@uction_data"):])
 
             if message == DISCONNECT_MESSAGE:
                 self.listen_server = False

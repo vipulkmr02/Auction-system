@@ -5,7 +5,17 @@ from common import *
 from os import system
 
 auctions = fetch_auctions()
-print(auctions)
+
+
+def connect_auction():
+    global auctions, auction_list
+    auctions = fetch_auctions()
+    key = f"Auction_{auction_list.get(ANCHOR).split('|')[0]}"
+    command = f".\\bddrs_GUI.pyw {auctions[key]['name']} {auctions[key]['address'][0]}+{auctions[key]['address'][1]})"
+
+    system(command)
+
+
 main_window = Tk()
 
 user_details_frame = LabelFrame(
@@ -14,14 +24,6 @@ user_details_frame = LabelFrame(
     padx=10,
     pady=10
 )
-
-
-def connect_auction():
-    global auctions
-    key = "Auction_" + auction_list.get(ANCHOR).split("|")[0][:-1]
-    system(
-        f".\\bddrs_GUI.pyw .\\data\\Auction_{auctions[key]['name']} {auctions[key]['address'][0]}+{auctions[key]['address'][1]}")
-
 
 # USER's details
 Label(
@@ -46,11 +48,11 @@ list_frame = LabelFrame(
     padx=10,
     pady=10)
 
-# Auctions list
 auction_list = Listbox(
     list_frame,
     font=FONT_LISTBOX
 )
+# Auctions list
 auction_list.pack(padx=10, pady=10)
 
 
@@ -60,6 +62,8 @@ def clear_auction_list():
 
 
 def create_auction_list():
+    global auctions
+    auctions = fetch_auctions()
     for key in auctions:
         auction_list.insert(0, f"{auctions[key]['name']} | {auctions[key]['price']}")
 
@@ -91,6 +95,9 @@ list_frame.pack(pady=10, padx=10)
 options.pack(pady=10, padx=10)
 
 create_auction_list()
+update = Thread(target=update_auction_list)
+update.start()
 main_window.mainloop()
+update.join()
 
 # TODO: not showing all auctions in the "auction_list" list box

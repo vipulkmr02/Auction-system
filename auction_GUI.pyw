@@ -87,17 +87,19 @@ time_left = Label(
 )
 time_left.grid(row=0, column=1, columnspan=3)
 
-Label(
+high = Label(
     auction_details_frame,
     text=action.highest_bidder,
     font=("Engraves MT", 20, 'bold')
-).grid(row=1, column=2)
+)
+high.grid(row=1, column=2)
 
-Label(
+bid = Label(
     auction_details_frame,
     text=action.current_bid,
     font=("Engraves MT", 16, 'bold')
-).grid(row=2, column=2)
+)
+bid.grid(row=2,column=2)
 
 # Bidders
 
@@ -108,7 +110,7 @@ clients_list.grid(row=0, column=0)
 for client, values in action.clients:
     clients_list.insert(
         END,
-        f"{client} has placed a bid of {values['bids'][-1]} {action.currency}, this is the {numberth(values['last_bid_position'])} bid")
+        f"{client} has placed a bid of {values['bids'][-1]} INR, this is the {numberth(values['last_bid_position'])} bid")
 
 Button_frame = LabelFrame(
     bidders_frame,
@@ -138,7 +140,6 @@ auction_window.minsize(400, 400)
 
 
 def start_auction():
-    print("auction started")
     action.start()
     fetch_auctions('+', auction_info)
     Thread(target=time_count).start()
@@ -146,11 +147,11 @@ def start_auction():
 
 
 def stop_auction():
-    print("auction stopped")
+    action.evaluate_result()
+    high.configure(text=action.highest_bidder)
+    bid.configure(text=action.current_bid)
     fetch_auctions('-', auction_info)
     action.stop()
-    action.evaluate_result()
-    fetch_auctions('-', auction_info)
 
 
 start_button = Button(

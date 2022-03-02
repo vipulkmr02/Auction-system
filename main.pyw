@@ -4,18 +4,19 @@ from tkinter import *
 main_window = Tk()
 main_window.title("AUCTION SYSTEM")
 main_window.geometry("600x200")
-main_window.configure(background="white")
+# main_window.configure(background="white")
 font = "\"Lucida Bright\" 40"
 
 
 def create():
     main_window.destroy()
-    sys("python -u .\\auction_details_gui.pyw")
+    sys(".\\auction_details_gui.pyw")
 
 
 def join():
     main_window.destroy()
-    sys("python -u .\\join_GUI.pyw")
+    sys(".\\join_GUI.pyw")
+
 
 # create auction button
 Button(
@@ -23,17 +24,18 @@ Button(
     command=create,
     padx=50,
     font=font,
-    anchor=CENTER
-
-).grid(row=0, column=0)
+    anchor=CENTER, 
+    relief=FLAT
+).pack()
 
 # join button
 Button(
     text="join",
     command=join,
     padx=50,
-    font=font
-).grid(row=0, column=1)
+    font=font,
+    relief=FLAT
+).pack()
 
 main_window.resizable(False, False)
 main_window.mainloop()

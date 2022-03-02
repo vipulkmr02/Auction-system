@@ -153,40 +153,35 @@ owner_number.grid(row=1, column=1, padx=20, pady=20)
 
 
 def collect():
+    if var.get() == 1:
+        AUCTION["type"] = "PUBLIC"
+    elif var.get() == 2:
+        AUCTION["type"] = "PRIVATE"
+    else:
+        status.configure(text="Please specify TYPE of AUCTION")
+        return None
+
+    AUCTION["duration"] = duration_box.get()
+
     if Item_name.get() == "":
         status.configure(text="Item name is not given")
+        return None
     else:
         ITEM["name"] = Item_name.get()
 
-    if Item_desc.get() == "":
-        status.configure(text="Item description is not given")
-    else:
-        ITEM["desc"] = Item_desc.get()
-
     if Item_price.get() == "":
         status.configure(text="Item price is not given")
+        return None
     else:
         ITEM["price"] = Item_price.get()
 
     ITEM["dimensions"] = Item_dimension.get()
-
+    ITEM["desc"] = Item_desc.get()
     ITEM["details"] = Item_details.get()
-
-    if var.get() == 1:
-        AUCTION["type"] = "PUBLIC"
-
-    elif var.get() == 2:
-        AUCTION["type"] = "PRIVATE"
-
-    else:
-        status.configure(text="Please specify TYPE of AUCTION")
-
-    print(AUCTION)
-
-    AUCTION["duration"] = duration_box.get()
 
     if owner_name.get() == "" or owner_number.get() == "":
         status.configure(text="Owner details are not complete")
+        return None
     else:
         OWNER["name"] = owner_name.get()
         OWNER["mobile"] = owner_number.get()
